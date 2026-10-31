@@ -19,6 +19,8 @@
 .footer{border-top:1px solid #d4e9e4;margin-top:24px}.footer-inner{display:flex;justify-content:space-between;gap:20px;padding-top:24px;padding-bottom:35px;color:#4d6870;font-size:12px}.footer strong{color:var(--teal);letter-spacing:.13em}.footer p{margin:5px 0}
 dialog{border:0;padding:0;border-radius:18px;box-shadow:0 20px 70px #00334755;width:min(620px,calc(100% - 28px));max-height:calc(100% - 28px);overflow:auto;color:var(--ink)}dialog::backdrop{background:#032e3cc4}.modal-head{display:flex;justify-content:space-between;align-items:start;gap:15px;padding:23px 25px 14px}.modal-head h2{font:400 29px/1.15 Georgia,serif;margin:4px 0}.modal-head p{margin:5px 0;color:var(--muted);font-size:13px}.modal-body{padding:0 25px 25px}.icon-btn{border:1px solid #d4e9e4;background:white;border-radius:9px;width:34px;height:34px;color:#496970;font-size:20px;line-height:1;flex:none}.form-msg{min-height:1.2em;font-size:13px;margin:11px 0 0;color:var(--danger)}.receipt{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-weight:750;overflow-wrap:anywhere;letter-spacing:.02em;color:var(--teal);background:#e3f8f1;border:1px solid #bce4da;border-radius:9px;padding:12px}.hidden-visually{position:absolute!important;clip:rect(0,0,0,0);width:1px;height:1px;overflow:hidden}
 @media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.import-layout{grid-template-columns:1fr}.hero{padding:45px}.tagline{display:none}}@media(max-width:650px){.header-inner{padding:14px 18px;align-items:flex-start;flex-direction:column;gap:12px}.nav{width:100%;gap:2px}.nav button{font-size:12px;padding:8px}.nav .staff-link{padding:7px 9px;margin-left:auto}.brand-mark{width:39px;height:39px}.container{padding-left:17px;padding-right:17px}.hero{margin-top:18px;border-radius:17px;padding:31px 23px;min-height:0}.hero h1{font-size:36px}.hero p{font-size:14px}.searchbox{gap:8px;padding-left:10px}.searchbox .primary{padding:11px 12px;font-size:13px}.grid{grid-template-columns:1fr;gap:12px}.below-hero{padding-top:27px}.section-title{font-size:26px}.footer-inner{flex-direction:column}.staff-title{align-items:flex-start;flex-direction:column}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.panel{padding:19px}.toolbar .field,.toolbar .search-field{width:100%;min-width:0}.book-card-top{padding:17px 17px 10px}.book-info{padding:0 17px 13px}.book-bottom{padding:11px 17px}}
+.report-form{display:flex;align-items:flex-end;gap:12px;flex-wrap:wrap;margin:20px 0 8px}.report-form .field{min-width:170px}.report-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;margin:18px 0}.report-stat{border:1px solid #cfe9e2;background:#f1faf7;border-radius:12px;padding:14px}.report-stat strong{display:block;color:var(--teal);font-size:25px;line-height:1.15}.report-stat span{color:var(--muted);font-size:12px}.report-title-row{border-top:1px solid var(--line);margin-top:24px;padding-top:15px}.report-title-row h3,.report-popular h3{margin:0 0 4px}.report-popular{margin:22px 0}.report-popular ol{padding-left:24px;margin:8px 0}.report-popular li{padding:3px 0;overflow-wrap:anywhere}.report-table-note{margin:12px 0}.print-only{display:none}
+@media print{body{background:white!important;color:#111!important;font:11px/1.35 Arial,sans-serif!important}body>*:not(#report-print){display:none!important}#report-print{display:block!important;padding:0;margin:0}#report-print h1{font-size:20px;margin:0 0 8px}#report-print h2{font-size:14px;margin:14px 0 6px}#report-print p{margin:4px 0}#report-print table{border-collapse:collapse;width:100%;font-size:9px}#report-print th,#report-print td{border:1px solid #777;padding:4px;text-align:left;vertical-align:top;overflow-wrap:anywhere}#report-print thead{display:table-header-group}#report-print tr{break-inside:avoid}#report-print ol{padding-left:20px} @page{size:auto;margin:14mm}}
 </style>
 </head>
 <body>
@@ -56,10 +58,39 @@ dialog{border:0;padding:0;border-radius:18px;box-shadow:0 20px 70px #00334755;wi
   <div id="staff-login-wrap" class="utility" hidden><div class="page-heading"><div class="eyebrow">For library staff</div><h1>Welcome back.</h1><p>Sign in with the staff account authorized for Chronos.</p></div><div class="panel"><form id="login-form" class="stack"><div class="field"><label for="login-email">Email address</label><input id="login-email" type="email" autocomplete="username" required></div><div class="field"><label for="login-password">Password</label><input id="login-password" type="password" autocomplete="current-password" required></div><div id="login-message" class="form-msg" role="alert"></div><div><button class="primary" type="submit">Sign in to Chronos</button></div><p class="help">Sign out when finished, especially on a shared computer.</p></form></div></div>
   <div id="staff-app" hidden>
     <div class="staff-title"><div><div class="section-kicker">Chronos / Staff</div><h1>Library workspace</h1><p>Manage the collection and student requests.</p></div><div class="staff-head-actions"><span id="staff-email" class="inline-note"></span><button type="button" class="secondary" id="sign-out">Sign out</button></div></div>
-    <div class="staff-tabs" role="tablist" aria-label="Staff workspace sections"><button type="button" role="tab" data-tab="inventory" aria-selected="true">Inventory</button><button type="button" role="tab" data-tab="requests" aria-selected="false">Requests & loans</button><button type="button" role="tab" data-tab="import" aria-selected="false">Import spreadsheet</button><button type="button" role="tab" data-tab="legacy" aria-selected="false">Previous local data</button></div>
+    <div class="staff-tabs" role="tablist" aria-label="Staff workspace sections"><button type="button" role="tab" data-tab="inventory" aria-selected="true">Inventory</button><button type="button" role="tab" data-tab="requests" aria-selected="false">Requests & loans</button><button type="button" role="tab" data-tab="reports" aria-selected="false">Borrower reports</button><button type="button" role="tab" data-tab="import" aria-selected="false">Import spreadsheet</button><button type="button" role="tab" data-tab="legacy" aria-selected="false">Previous local data</button></div>
     <div id="staff-alert" role="status" aria-live="polite" hidden></div>
     <section id="tab-inventory" role="tabpanel"><div class="toolbar"><div class="field search-field"><label for="staff-search">Search inventory</label><input id="staff-search" type="search" placeholder="Title, author, accession or call number" maxlength="120"></div><div class="field"><label for="staff-filter">Visibility</label><select id="staff-filter"><option value="all">All books</option><option value="live">Public catalog</option><option value="draft">Drafts / hidden</option><option value="flagged">Needs review</option></select></div><button type="button" id="staff-search-button" class="secondary">Search</button><button type="button" id="add-book" class="primary">+ Add book</button></div><div id="staff-books-summary" class="section-meta" aria-live="polite"></div><div id="staff-books-table"></div><div class="pagination" id="staff-books-pages" hidden><button type="button" class="secondary" id="staff-books-prev">← Previous</button><span id="staff-books-page-label"></span><button type="button" class="secondary" id="staff-books-next">Next →</button></div></section>
     <section id="tab-requests" role="tabpanel" hidden><div class="notice warn"><strong>Verify student identity at pickup.</strong> A name and student number alone do not prove who submitted a request.</div><div class="toolbar"><div class="field"><label for="request-filter">Request status</label><select id="request-filter"><option value="pending">Pending</option><option value="approved">Approved</option><option value="collected">Borrowed / collected</option><option value="all">All statuses</option><option value="declined">Declined</option><option value="returned">Returned</option><option value="cancelled">Cancelled</option><option value="expired">Expired</option></select></div><button type="button" id="reload-requests" class="secondary">Refresh</button></div><div id="staff-requests-table"></div><div class="pagination" id="requests-pages" hidden><button type="button" class="secondary" id="requests-prev">← Previous</button><span id="requests-page-label"></span><button type="button" class="secondary" id="requests-next">Next →</button></div></section>
+    <section id="tab-reports" role="tabpanel" hidden>
+      <div class="panel report-panel">
+        <div class="section-kicker">Staff / Reports</div>
+        <h2 class="section-title">Borrower statistics</h2>
+        <p class="section-meta">Generate a report whenever you need one. It includes borrowed and returned books, not requests that were never collected.</p>
+        <form id="report-form" class="report-form">
+          <div class="field"><label for="report-from">Borrowed from</label><input type="date" id="report-from" min="1900-01-01" max="9999-12-31"></div>
+          <div class="field"><label for="report-to">Borrowed through</label><input type="date" id="report-to" min="1900-01-01" max="9999-12-31"></div>
+          <button type="submit" class="primary">Generate report</button>
+        </form>
+        <p class="help">Leave both dates blank for all time. Date ranges use the borrowing date in Philippine time. Older loans without a borrowing date appear only in all-time reports.</p>
+        <div class="notice warn"><strong>Private student information.</strong> Reports contain names and student numbers. Save and share them only as permitted by your school.</div>
+        <div id="report-error" class="form-msg" role="alert"></div>
+        <div id="report-status" class="section-meta" role="status" aria-live="polite"></div>
+        <div id="report-output" hidden>
+          <div class="report-title-row"><div><h3 id="report-period-title">Report</h3><p class="help" id="report-generated"></p></div></div>
+          <div class="report-stats" id="report-stats"></div>
+          <p class="help">Borrowers are counted by entered student number, not verified identity. Status counts reflect loans in the selected period as they are now. Deleted records are not counted.</p>
+          <p id="report-undated" class="help"></p>
+          <div class="report-popular"><h3>Most borrowed titles</h3><div id="report-top-books"></div></div>
+          <h3>Borrower and loan details</h3>
+          <p class="help">One row per loan; a student may appear more than once.</p>
+          <div id="report-rows"></div>
+          <div class="pagination" id="report-pages" hidden><button type="button" class="secondary" id="report-prev">← Previous</button><span id="report-page-label"></span><button type="button" class="secondary" id="report-next">Next →</button></div>
+          <p class="help">Excel and PDF exports include up to 5,000 loans. For a larger report, choose a smaller date range.</p>
+          <div class="action-row"><button type="button" id="report-excel" class="secondary">Download Excel</button><button type="button" id="report-pdf" class="primary">Print / Save as PDF</button></div>
+        </div>
+      </div>
+    </section>
     <section id="tab-import" role="tabpanel" hidden><div class="import-layout"><div class="panel"><div class="section-kicker">Add records safely</div><h2 class="section-title">Import a spreadsheet</h2><p class="section-meta">Select an Excel or CSV file. You’ll see a preview first; imported rows are always hidden drafts.</p><div class="import-zone"><label for="inventory-file" class="label">Choose an .xlsx, .xls or .csv file</label><input type="file" id="inventory-file" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv"><div class="help">The file is read in your browser. Review the preview before saving. Importing the same file again creates duplicate drafts.</div></div><div id="import-preview" aria-live="polite"></div><div class="action-row"><button type="button" id="import-save" class="primary" disabled>Save as hidden drafts</button></div></div><div class="import-side"><h3>Before you publish</h3><p>The supplied inventory is labelled July 2025. Titles without review flags may still contain mistakes or outdated information.</p><ul><li>Unverified availability is clearly labeled.</li><li>Staff must verify copies before approval.</li><li>Discarded and flagged entries stay hidden.</li></ul></div></div><div class="panel" style="margin-top:18px"><h3 style="margin:0 0 5px">Import batches</h3><p class="section-meta">Unflagged drafts can be published provisionally with availability marked unverified. Flagged records stay hidden for individual review.</p><div id="import-batches"></div></div></section>
     <section id="tab-legacy" role="tabpanel" hidden><div class="notice warn"><strong>Previous browser-only manager.</strong> These records are stored on this device, not in the shared catalog. They are not protected from someone using the same browser, and they are not automatically migrated. Use the old app’s backup option before changing them.</div><div class="toolbar"><button type="button" class="secondary" id="open-legacy">Open previous local manager</button></div><iframe id="legacy-frame" class="legacy-frame" title="Previous browser-only library manager" hidden></iframe></section>
   </div>
@@ -70,6 +101,7 @@ dialog{border:0;padding:0;border-radius:18px;box-shadow:0 20px 70px #00334755;wi
 <dialog id="reserve-dialog" aria-labelledby="reserve-title"><div class="modal-head"><div><div class="section-kicker">Request a book</div><h2 id="reserve-title">Request this title</h2><p id="reserve-book-title"></p><p id="reserve-availability" class="help"></p></div><button class="icon-btn" type="button" data-close="reserve-dialog" aria-label="Close">×</button></div><div class="modal-body"><form id="reserve-form"><div class="form-grid"><div class="field full"><label for="student-name">Student name</label><input id="student-name" maxlength="120" autocomplete="name" required></div><div class="field full"><label for="student-number">Student number</label><input id="student-number" maxlength="60" autocomplete="off" required></div></div><label class="check"><input type="checkbox" id="privacy-check" required><span>I understand this is a request, not a confirmed reservation. My name and student number will be shared with library staff to process it.</span></label><div class="help">Requests are stored in the library’s Supabase project in Ireland and are not automatically deleted. Ask the library about its retention and deletion policy. Staff should check your student ID at pickup. Cloudflare Turnstile provides bot verification.</div><div id="turnstile-box" style="margin-top:14px"></div><div id="turnstile-message" class="help" role="status" aria-live="polite">Preparing verification…</div><div id="reserve-error" class="form-msg" role="alert"></div><div class="action-row"><button type="button" class="secondary" data-close="reserve-dialog">Cancel</button><button id="reserve-submit" type="submit" class="primary" disabled>Submit request</button></div></form><div id="reserve-success" hidden><p>Your request was submitted. Approval depends on staff and available copies.</p><p><strong>Save this private receipt code</strong> to check your request later:</p><div class="receipt" id="receipt-code"></div><p class="help">Anyone with this code can check the request status. Do not share it publicly.</p><div class="action-row"><button type="button" class="primary" data-close="reserve-dialog">Done</button></div></div></div></dialog>
 <dialog id="book-dialog" aria-labelledby="book-dialog-title"><div class="modal-head"><div><div class="section-kicker">Staff / Inventory</div><h2 id="book-dialog-title">Book details</h2><p>Drafts remain hidden until published.</p></div><button class="icon-btn" type="button" data-close="book-dialog" aria-label="Close">×</button></div><div class="modal-body"><form id="book-form"><div class="form-grid"><div class="field full"><label for="book-title">Title *</label><input id="book-title" maxlength="300" required></div><div class="field"><label for="book-author">Author</label><input id="book-author" maxlength="300"></div><div class="field"><label for="book-copies">Total copies *</label><input id="book-copies" type="number" min="0" max="1000000" step="1" required></div><div class="field"><label for="book-accession">Accession number</label><input id="book-accession" maxlength="300"></div><div class="field"><label for="book-call">Call number</label><input id="book-call" maxlength="100"></div><div class="field"><label for="book-copyright">Copyright date</label><input id="book-copyright" maxlength="60"></div><div class="field"><label for="book-isbn">ISBN</label><input id="book-isbn" maxlength="100"></div><div class="field"><label for="book-category">Category</label><input id="book-category" maxlength="200"></div><div class="field"><label for="book-publisher">Publisher</label><input id="book-publisher" maxlength="300"></div><div class="field full"><label for="book-remarks">Inventory remarks</label><input id="book-remarks" maxlength="300"></div><div class="field full"><label for="book-notes">Review notes</label><textarea id="book-notes" maxlength="2000" readonly></textarea><small id="book-source"></small></div><div class="field full"><label for="book-visibility">Visibility</label><select id="book-visibility"><option value="draft">Hidden draft</option><option value="live">Visible in student catalog</option></select></div></div><label class="check"><input type="checkbox" id="book-verified"><span>I verified the current total copies and checked availability using up-to-date library information.</span></label><p class="help">Until verified, availability is shown as unverified and staff cannot approve or issue this book. Total copies includes borrowed or held copies.</p><label class="check" id="clear-review-wrap" hidden><input type="checkbox" id="clear-review"><span>I checked the flagged details against the source and current inventory. Clear these review notes.</span></label><div id="book-error" class="form-msg" role="alert"></div><div class="action-row"><button type="button" class="secondary" data-close="book-dialog">Cancel</button><button type="submit" class="primary">Save book</button></div></form></div></dialog>
 <dialog id="loan-dialog" aria-labelledby="loan-dialog-title"><div class="modal-head"><div><div class="section-kicker">Staff / Circulation</div><h2 id="loan-dialog-title">Issue a book</h2><p id="loan-book-title"></p></div><button class="icon-btn" type="button" data-close="loan-dialog" aria-label="Close">×</button></div><div class="modal-body"><form id="loan-form"><div class="form-grid"><div class="field full"><label for="loan-name">Student name</label><input id="loan-name" maxlength="120" required></div><div class="field"><label for="loan-number">Student number</label><input id="loan-number" maxlength="60" required></div><div class="field"><label for="loan-due">Due date (optional)</label><input id="loan-due" type="date"></div></div><div id="loan-error" class="form-msg" role="alert"></div><div class="action-row"><button type="button" class="secondary" data-close="loan-dialog">Cancel</button><button type="submit" class="primary">Issue book</button></div></form></div></dialog>
+<section id="report-print" class="print-only" aria-label="Printable borrower report"></section>
 <script>
 const CHRONOS_PROJECT_URL = "https://hbfmlpfjbpdbahatugxj.supabase.co";
 const CHRONOS_PUBLISHABLE_KEY = "sb_publishable_YDl1-FBk6SDCNchqmcmf4A_Ff-XB_Fs";
@@ -84,6 +116,7 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
     catalog: { query: '', offset: 0, limit: 24, total: 0, serial: 0 },
     books: { query: '', filter: 'all', offset: 0, limit: 30, total: 0, rows: [], serial: 0 },
     requests: { filter: 'pending', offset: 0, limit: 30, total: 0, serial: 0 },
+    reports: { offset: 0, limit: 50, total: 0, serial: 0, applied: null },
     page: 'catalog', tab: 'inventory', reserveBook: null, reserveSubmitting: false, editingBook: null, loanBook: null,
     challengeSerial: 0, turnstileWidget: null, turnstileToken: '', turnstileLoading: null,
     workbook: null, fileName: '', importRows: null, importBatch: null, importInvalid: [], sheetLoading: null,
@@ -157,9 +190,9 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
     if (page === 'catalog' && state.client && !state.catalog.serial) loadCatalog();
   }
   function goTab(tab) {
-    if (!['inventory','requests','import','legacy'].includes(tab)) tab = 'inventory';
+    if (!['inventory','requests','reports','import','legacy'].includes(tab)) tab = 'inventory';
     state.tab = tab;
-    for (const t of ['inventory','requests','import','legacy']) $('tab-' + t).hidden = t !== tab;
+    for (const t of ['inventory','requests','reports','import','legacy']) $('tab-' + t).hidden = t !== tab;
     $$('[data-tab]').forEach(el => el.setAttribute('aria-selected', String(el.dataset.tab === tab)));
     showMessage('staff-alert', '');
     if (!state.staff) return;
@@ -333,7 +366,11 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
     }
   }
   function clearPrivateView() {
-    state.books.serial++; state.requests.serial++; state.books.rows = [];
+    state.books.serial++; state.requests.serial++; state.reports.serial++; state.books.rows = [];
+    state.reports.applied = null; state.reports.offset = 0; state.reports.total = 0;
+    $('report-output').hidden = true; $('report-stats').replaceChildren(); $('report-top-books').replaceChildren();
+    $('report-rows').replaceChildren(); $('report-print').replaceChildren(); $('report-status').textContent = ''; $('report-error').textContent = '';
+    $('report-form').reset(); setBusy($('report-form'), false);
     state.workbook = null; state.importRows = null; state.importBatch = null; state.importInvalid = [];
     $('staff-books-table').replaceChildren(); $('staff-requests-table').replaceChildren();
     $('import-preview').replaceChildren(); $('import-batches').replaceChildren(); $('inventory-file').value = '';
@@ -350,11 +387,13 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
       if (serial !== state.authSerial) return;
       if (ok === true) { state.staff = true; $('login-message').textContent = ''; }
       else {
+        clearPrivateView();
         $('login-message').textContent = 'This account is not authorized as Chronos staff.';
         await state.client.auth.signOut();
       }
     } catch {
       if (serial !== state.authSerial) return;
+      clearPrivateView();
       $('login-message').textContent = 'Staff access is not ready. Please contact the system administrator.';
     }
     if (state.page === 'staff') renderStaffAuth();
@@ -668,6 +707,178 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
       rows.forEach(batch=>{ const row=element('div','batch'),details=element('div');details.append(element('strong','',`${batch.row_count} rows · ${humanDate(batch.created_at)}`),element('div','inline-note',`${batch.eligible} unflagged hidden titles eligible for provisional publication`));row.append(details,button(`Publish ${batch.eligible} provisionally`,'small-btn',()=>publishBatch(batch),!Number(batch.eligible)));root.append(row); });
     } catch { root.replaceChildren(element('p','form-msg','Could not load import batches.')); }
   }
+  // Staff-only on-demand borrower reports. A report uses one server snapshot;
+  // exports are rejected rather than silently truncated when above the cap.
+  const REPORT_EXPORT_LIMIT = 5000;
+  function reportDate(value) {
+    if (!value) return 'Not recorded';
+    const raw = /^\d{4}-\d{2}-\d{2}$/.test(String(value)) ? String(value) + 'T00:00:00+08:00' : value;
+    const d = new Date(raw);
+    return Number.isNaN(d.valueOf()) ? 'Not recorded' : d.toLocaleDateString('en-PH',{timeZone:'Asia/Manila',year:'numeric',month:'short',day:'numeric'});
+  }
+  function reportTimestamp(value) {
+    const d = new Date(value);
+    return Number.isNaN(d.valueOf()) ? 'Time not recorded' : d.toLocaleString('en-PH',{timeZone:'Asia/Manila',year:'numeric',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'});
+  }
+  function reportIsoDate(value) {
+    const d = new Date(value); if (Number.isNaN(d.valueOf())) return '';
+    const pieces = new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Manila',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(d);
+    const get = key => pieces.find(x=>x.type===key)?.value || '';
+    return `${get('year')}-${get('month')}-${get('day')}`;
+  }
+  function reportPeriod(data) {
+    return data.period_from && data.period_to ? `${reportDate(data.period_from)} – ${reportDate(data.period_to)}` : 'All time';
+  }
+  function reportLoanStatus(row, generated) {
+    if (row.status === 'collected' && row.due_on && row.due_on < reportIsoDate(generated)) return 'Overdue';
+    return statusLabel(row.status);
+  }
+  function reportValues(row, generated) {
+    return [String(row.student_name || ''), String(row.student_number || ''), String(row.book_title || ''),
+      String(row.book_call_number || ''), reportDate(row.borrowed_at), row.due_on ? reportDate(row.due_on) : '—',
+      row.status === 'returned' ? reportDate(row.returned_at) : '—', reportLoanStatus(row, generated)];
+  }
+  function reportSummary(data) {
+    return [
+      ['Unique borrowers', Number(data.unique_borrowers) || 0],
+      ['Loans recorded', Number(data.total_loans) || 0],
+      ['Borrowed now', Number(data.active_loans) || 0],
+      ['Returned by now', Number(data.returned_loans) || 0],
+      ['Overdue now', Number(data.overdue_loans) || 0]
+    ];
+  }
+  function assertReport(data) {
+    if (!data || typeof data !== 'object' || !Array.isArray(data.records) || !Array.isArray(data.top_books)
+        || !Number.isSafeInteger(Number(data.total_loans)) || Number(data.total_loans) < 0) {
+      throw new Error('Unexpected report result.');
+    }
+  }
+  function invalidateBorrowerReport() {
+    state.reports.serial++; state.reports.applied = null; state.reports.offset = 0; state.reports.total = 0;
+    $('report-output').hidden = true; $('report-stats').replaceChildren(); $('report-top-books').replaceChildren(); $('report-rows').replaceChildren();
+    $('report-error').textContent = ''; $('report-status').textContent = 'Choose dates, then generate a new report.'; setBusy($('report-form'),false);
+  }
+  function renderBorrowerReport(data, offset, visibleRecords = data.records) {
+    assertReport(data);
+    const total = Number(data.total_loans), undated = Number(data.undated_loans) || 0;
+    state.reports.offset = offset; state.reports.total = total;
+    $('report-output').hidden = false; $('report-period-title').textContent = `Borrower report · ${reportPeriod(data)}`;
+    $('report-generated').textContent = `Generated ${reportTimestamp(data.generated_at)} · Philippine time`;
+    const stats = $('report-stats'); stats.replaceChildren();
+    reportSummary(data).forEach(([label,value])=>{ const item=element('div','report-stat'); item.append(element('strong','',value.toLocaleString()),element('span','',label)); stats.append(item); });
+    $('report-undated').textContent = undated
+      ? `${undated.toLocaleString()} older ${undated===1?'loan has':'loans have'} no recorded borrowing date. ${data.period_from ? 'They cannot be included in a date-filtered report.' : 'They are included here but cannot be placed in a date-filtered report.'}`
+      : 'No recorded loans are missing a borrowing date.';
+    const top = $('report-top-books'); top.replaceChildren();
+    if (!data.top_books.length) top.append(element('p','help','No borrowed titles in this period.'));
+    else {
+      const list=element('ol'); data.top_books.forEach(book=>list.append(element('li','',`${book.title || 'Untitled'}${book.call_number ? ' · Call no. '+book.call_number : ''} — ${Number(book.loans)||0} ${(Number(book.loans)||0)===1?'loan':'loans'}`))); top.append(list);
+    }
+    const root=$('report-rows'); root.replaceChildren();
+    if (!visibleRecords.length) root.append(empty('No loans in this period','Requests that have not been collected are not counted.'));
+    else {
+      const table=makeTable(['Student','Student number','Book','Borrowed','Due','Returned','Status']);
+      table.wrap.tabIndex=0; table.wrap.setAttribute('role','region'); table.wrap.setAttribute('aria-label','Borrower and loan details; scroll to see all columns');
+      visibleRecords.forEach(row=>{
+        const v=reportValues(row,data.generated_at), tr=element('tr');
+        tr.append(cell(v[0]),cell(v[1]),cell(v[2],v[3] ? 'Call no. '+v[3] : ''),cell(v[4]),cell(v[5]),cell(v[6]),cell(v[7])); table.body.append(tr);
+      }); root.append(table.wrap);
+    }
+    setPager('report',offset,state.reports.limit,total);
+    const tooMany=total>REPORT_EXPORT_LIMIT;
+    $('report-excel').disabled=tooMany; $('report-pdf').disabled=tooMany;
+    $('report-status').textContent = total ? `Showing ${offset+1}–${Math.min(offset+visibleRecords.length,total)} of ${total.toLocaleString()} loans.` : 'Report generated; no loans in this period.';
+    if (tooMany) $('report-status').textContent += ' Narrow the date range to export all records.';
+  }
+  async function loadBorrowerReport(offset = 0) {
+    if (!state.staff) return;
+    const form=$('report-form'), from=$('report-from').value, to=$('report-to').value;
+    if ((Boolean(from) !== Boolean(to)) || (from && from > to)) {
+      $('report-error').textContent='Enter both report dates, with the start date no later than the end date.'; return;
+    }
+    const serial=++state.reports.serial; $('report-error').textContent=''; $('report-status').textContent='Generating report…'; setBusy(form,true);
+    try {
+      const data=await rpc('chronos_staff_borrower_report',{p_from:from || null,p_to:to || null,p_limit:state.reports.limit,p_offset:offset});
+      if (serial!==state.reports.serial || !state.staff) return;
+      assertReport(data);
+      if (offset > 0 && offset >= Number(data.total_loans)) { loadBorrowerReport(0); return; }
+      state.reports.applied={from,to}; renderBorrowerReport(data,offset);
+    } catch {
+      if (serial!==state.reports.serial) return;
+      state.reports.applied=null; $('report-output').hidden=true; $('report-status').textContent='';
+      $('report-error').textContent='Could not generate the report. Check your connection and try again.';
+    } finally { if (serial===state.reports.serial) setBusy(form,false); }
+  }
+  function excelSafe(value) {
+    if (typeof value !== 'string') return value;
+    return /^[\s]*[=+\-@]/.test(value) ? "'" + value : value;
+  }
+  function createBorrowerWorkbook(data) {
+    const XLSX=window.XLSX, wb=XLSX.utils.book_new();
+    const addSheet=(name,rows,widths)=>{
+      const ws=XLSX.utils.aoa_to_sheet(rows.map(row=>row.map(excelSafe)));
+      ws['!cols']=widths.map(w=>({wch:w})); XLSX.utils.book_append_sheet(wb,ws,name);
+    };
+    const undated=Number(data.undated_loans)||0;
+    const summary=[['Chronos borrower report'],['Period',reportPeriod(data)],['Generated (Philippine time)',reportTimestamp(data.generated_at)],[],...reportSummary(data),
+      ['Older loans without borrowing dates',undated],[],
+      ['Note','Borrowers are counted by entered student number, not verified identity. Status counts refer to loans in the selected period as they are now. Deleted records are not counted.'],
+      ['Date note','Older loans without recorded borrowing dates appear only in all-time reports.'],
+      ['Privacy','Contains student names and numbers. Handle according to school policy.']];
+    const top=[['Book','Call number','Loans'],...data.top_books.map(x=>[String(x.title||''),String(x.call_number||''),Number(x.loans)||0])];
+    const details=[['Student name','Student number','Book','Call number','Borrowed','Due','Returned','Status'],...data.records.map(x=>reportValues(x,data.generated_at))];
+    addSheet('Summary',summary,[35,80]); addSheet('Popular titles',top,[60,20,12]); addSheet('Borrower loans',details,[28,23,60,18,20,20,20,16]);
+    XLSX.writeFile(wb,`Chronos-borrowers-${reportIsoDate(data.generated_at) || 'report'}.xlsx`);
+  }
+  function createPrintableBorrowerReport(data) {
+    const root=$('report-print'); root.replaceChildren();
+    root.append(element('h1','','Chronos · Borrower report'),element('p','',`Period: ${reportPeriod(data)} · Generated ${reportTimestamp(data.generated_at)} (Philippine time)`));
+    root.append(element('p','','Private student information — handle according to school policy.'));
+    root.append(element('p','',reportSummary(data).map(([label,value])=>`${label}: ${value.toLocaleString()}`).join(' · ')));
+    root.append(element('p','','Borrowers are counted by entered student number, not verified identity. Status counts reflect loans in the selected period as they are now. Deleted records are not counted.'));
+    const undated=Number(data.undated_loans)||0;
+    if (undated) root.append(element('p','',`${undated.toLocaleString()} older ${undated===1?'loan has':'loans have'} no borrowing date and ${undated===1?'appears':'appear'} only in all-time reports.`));
+    root.append(element('h2','','Most borrowed titles'));
+    if (!data.top_books.length) root.append(element('p','','No borrowed titles in this period.'));
+    else { const ol=element('ol');data.top_books.forEach(b=>ol.append(element('li','',`${b.title || 'Untitled'}${b.call_number ? ' · '+b.call_number : ''} — ${Number(b.loans)||0} ${(Number(b.loans)||0)===1?'loan':'loans'}`)));root.append(ol); }
+    root.append(element('h2','','Borrower and loan details'),element('p','','One row per loan.'));
+    const table=element('table'),thead=element('thead'),header=element('tr'),body=element('tbody');
+    ['Student name','Student number','Book','Call no.','Borrowed','Due','Returned','Status'].forEach(label=>{const th=element('th','',label);th.scope='col';header.append(th)});
+    thead.append(header);table.append(thead,body);
+    data.records.forEach(row=>{const tr=element('tr');reportValues(row,data.generated_at).forEach(value=>tr.append(element('td','',value)));body.append(tr)});
+    root.append(table);
+  }
+  async function exportBorrowerReport(kind) {
+    if (!state.staff || !state.reports.applied) return;
+    const serial=state.reports.serial, range={...state.reports.applied};
+    $('report-error').textContent=''; $('report-excel').disabled=true; $('report-pdf').disabled=true; $('report-status').textContent='Preparing the report…';
+    try {
+      const data=await rpc('chronos_staff_borrower_report',{p_from:range.from || null,p_to:range.to || null,p_limit:REPORT_EXPORT_LIMIT,p_offset:0});
+      if (serial!==state.reports.serial || !state.staff) return;
+      assertReport(data); const total=Number(data.total_loans);
+      if (total>REPORT_EXPORT_LIMIT) { renderBorrowerReport(data,0,data.records.slice(0,state.reports.limit)); throw new Error('This report has more than 5,000 loans. Choose a smaller date range to export every loan.'); }
+      if (data.records.length!==total) throw new Error('The full report could not be loaded. Please generate it again.');
+      if (kind==='excel') {
+        await ensureSheetJS(); if (serial!==state.reports.serial || !state.staff) return;
+        createBorrowerWorkbook(data);
+      } else {
+        createPrintableBorrowerReport(data); if (serial!==state.reports.serial || !state.staff) { $('report-print').replaceChildren(); return; }
+        window.print();
+      }
+      renderBorrowerReport(data,0,data.records.slice(0,state.reports.limit));
+      $('report-status').textContent = kind==='excel' ? 'Excel report prepared with the latest data.' : 'Choose Save as PDF in the print dialog.';
+    } catch (error) {
+      if (serial!==state.reports.serial) return;
+      const allowed=['This report has more than 5,000 loans. Choose a smaller date range to export every loan.','The full report could not be loaded. Please generate it again.'];
+      $('report-error').textContent=allowed.includes(error?.message) ? error.message : 'Could not prepare the report. Check your connection and try again.';
+      $('report-status').textContent='';
+    } finally {
+      if (serial===state.reports.serial && state.staff) {
+        const tooMany=state.reports.total>REPORT_EXPORT_LIMIT; $('report-excel').disabled=tooMany; $('report-pdf').disabled=tooMany;
+      }
+    }
+  }
+
   function openLegacy() {
     try {
       if (!state.legacyLoaded) {
@@ -707,6 +918,12 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
     $('reload-requests').addEventListener('click',loadStaffRequests);
     $('requests-prev').addEventListener('click',()=>{state.requests.offset=Math.max(0,state.requests.offset-state.requests.limit);loadStaffRequests();});
     $('requests-next').addEventListener('click',()=>{state.requests.offset+=state.requests.limit;loadStaffRequests();});
+    $('report-form').addEventListener('submit',event=>{event.preventDefault();loadBorrowerReport(0);});
+    ['report-from','report-to'].forEach(id=>$(id).addEventListener('input',invalidateBorrowerReport));
+    $('report-prev').addEventListener('click',()=>loadBorrowerReport(Math.max(0,state.reports.offset-state.reports.limit)));
+    $('report-next').addEventListener('click',()=>loadBorrowerReport(state.reports.offset+state.reports.limit));
+    $('report-excel').addEventListener('click',()=>exportBorrowerReport('excel')); $('report-pdf').addEventListener('click',()=>exportBorrowerReport('pdf'));
+    window.addEventListener('afterprint',()=>$('report-print').replaceChildren());
     $('inventory-file').addEventListener('change',selectFile);$('import-save').addEventListener('click',saveImport);$('open-legacy').addEventListener('click',openLegacy);
     window.addEventListener('hashchange',()=>goPage(location.hash.slice(1),false));
   }
