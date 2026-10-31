@@ -58,7 +58,7 @@ dialog{border:0;padding:0;border-radius:18px;box-shadow:0 20px 70px #00334755;wi
   <div id="staff-login-wrap" class="utility" hidden><div class="page-heading"><div class="eyebrow">For library staff</div><h1>Welcome back.</h1><p>Sign in with the staff account authorized for Chronos.</p></div><div class="panel"><form id="login-form" class="stack"><div class="field"><label for="login-email">Email address</label><input id="login-email" type="email" autocomplete="username" required></div><div class="field"><label for="login-password">Password</label><input id="login-password" type="password" autocomplete="current-password" required></div><div id="login-message" class="form-msg" role="alert"></div><div><button class="primary" type="submit">Sign in to Chronos</button></div><p class="help">Sign out when finished, especially on a shared computer.</p></form></div></div>
   <div id="staff-app" hidden>
     <div class="staff-title"><div><div class="section-kicker">Chronos / Staff</div><h1>Library workspace</h1><p>Manage the collection and student requests.</p></div><div class="staff-head-actions"><span id="staff-email" class="inline-note"></span><button type="button" class="secondary" id="sign-out">Sign out</button></div></div>
-    <div class="staff-tabs" role="tablist" aria-label="Staff workspace sections"><button type="button" role="tab" data-tab="inventory" aria-selected="true">Inventory</button><button type="button" role="tab" data-tab="requests" aria-selected="false">Requests & loans</button><button type="button" role="tab" data-tab="reports" aria-selected="false">Borrower reports</button><button type="button" role="tab" data-tab="import" aria-selected="false">Import spreadsheet</button><button type="button" role="tab" data-tab="legacy" aria-selected="false">Previous local data</button></div>
+    <div class="staff-tabs" role="tablist" aria-label="Staff workspace sections"><button type="button" role="tab" data-tab="inventory" aria-selected="true">Inventory</button><button type="button" role="tab" data-tab="requests" aria-selected="false">Requests & loans</button><button type="button" role="tab" data-tab="reports" aria-selected="false">Borrower reports</button><button type="button" role="tab" data-tab="entrance" aria-selected="false">Entrance log</button><button type="button" role="tab" data-tab="import" aria-selected="false">Import spreadsheet</button><button type="button" role="tab" data-tab="legacy" aria-selected="false">Previous local data</button></div>
     <div id="staff-alert" role="status" aria-live="polite" hidden></div>
     <section id="tab-inventory" role="tabpanel"><div class="toolbar"><div class="field search-field"><label for="staff-search">Search inventory</label><input id="staff-search" type="search" placeholder="Title, author, accession or call number" maxlength="120"></div><div class="field"><label for="staff-filter">Visibility</label><select id="staff-filter"><option value="all">All books</option><option value="live">Public catalog</option><option value="draft">Drafts / hidden</option><option value="flagged">Needs review</option></select></div><button type="button" id="staff-search-button" class="secondary">Search</button><button type="button" id="add-book" class="primary">+ Add book</button></div><div id="staff-books-summary" class="section-meta" aria-live="polite"></div><div id="staff-books-table"></div><div class="pagination" id="staff-books-pages" hidden><button type="button" class="secondary" id="staff-books-prev">← Previous</button><span id="staff-books-page-label"></span><button type="button" class="secondary" id="staff-books-next">Next →</button></div></section>
     <section id="tab-requests" role="tabpanel" hidden><div class="notice warn"><strong>Verify student identity at pickup.</strong> A name and student number alone do not prove who submitted a request.</div><div class="toolbar"><div class="field"><label for="request-filter">Request status</label><select id="request-filter"><option value="pending">Pending</option><option value="approved">Approved</option><option value="collected">Borrowed / collected</option><option value="all">All statuses</option><option value="declined">Declined</option><option value="returned">Returned</option><option value="cancelled">Cancelled</option><option value="expired">Expired</option></select></div><button type="button" id="reload-requests" class="secondary">Refresh</button></div><div id="staff-requests-table"></div><div class="pagination" id="requests-pages" hidden><button type="button" class="secondary" id="requests-prev">← Previous</button><span id="requests-page-label"></span><button type="button" class="secondary" id="requests-next">Next →</button></div></section>
@@ -91,6 +91,31 @@ dialog{border:0;padding:0;border-radius:18px;box-shadow:0 20px 70px #00334755;wi
         </div>
       </div>
     </section>
+    <section id="tab-entrance" role="tabpanel" hidden>
+      <div class="panel report-panel">
+        <div class="section-kicker">Staff / Visits</div><h2 class="section-title">Library entrance log</h2>
+        <p class="section-meta">Review entry records. Counts are check-ins, not verified identities or unique people.</p>
+        <p><a href="./entrance.html" target="_blank" rel="noopener noreferrer" class="secondary">Open entrance portal ↗</a></p>
+        <div class="notice warn"><strong>Shared kiosk safety.</strong> Open the entrance portal in a separate signed-out browser profile. Never leave a staff account signed in on a public device.</div>
+        <form id="entrance-report-form" class="report-form">
+          <div class="field"><label for="entrance-from">Entered from</label><input type="date" id="entrance-from" min="1900-01-01" max="9999-12-31"></div>
+          <div class="field"><label for="entrance-to">Entered through</label><input type="date" id="entrance-to" min="1900-01-01" max="9999-12-31"></div>
+          <button type="submit" class="primary">Generate entrance log</button>
+        </form>
+        <p class="help">Leave both dates blank for all retained records. Date filters use Philippine time. Visitor records are not automatically deleted.</p>
+        <div class="notice warn"><strong>Private visitor information.</strong> Names and ID numbers must be stored and shared only as the school permits.</div>
+        <div id="entrance-report-error" class="form-msg" role="alert"></div><div id="entrance-report-status" class="section-meta" role="status" aria-live="polite"></div>
+        <div id="entrance-report-output" hidden>
+          <div class="report-title-row"><div><h3 id="entrance-period-title">Entrance log</h3><p class="help" id="entrance-generated"></p></div></div>
+          <div class="report-stats" id="entrance-stats"></div>
+          <p class="help">Each row is one entry. One person can appear more than once. Deleted records are not counted.</p>
+          <div id="entrance-rows"></div>
+          <div class="pagination" id="entrance-pages" hidden><button type="button" class="secondary" id="entrance-prev">← Previous</button><span id="entrance-page-label"></span><button type="button" class="secondary" id="entrance-next">Next →</button></div>
+          <p class="help">Excel and PDF exports include up to 5,000 entries. For a larger report, choose a smaller date range.</p>
+          <div class="action-row"><button type="button" id="entrance-excel" class="secondary">Download Excel</button><button type="button" id="entrance-pdf" class="primary">Print / Save as PDF</button></div>
+        </div>
+      </div>
+    </section>
     <section id="tab-import" role="tabpanel" hidden><div class="import-layout"><div class="panel"><div class="section-kicker">Add records safely</div><h2 class="section-title">Import a spreadsheet</h2><p class="section-meta">Select an Excel or CSV file. You’ll see a preview first; imported rows are always hidden drafts.</p><div class="import-zone"><label for="inventory-file" class="label">Choose an .xlsx, .xls or .csv file</label><input type="file" id="inventory-file" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv"><div class="help">The file is read in your browser. Review the preview before saving. Importing the same file again creates duplicate drafts.</div></div><div id="import-preview" aria-live="polite"></div><div class="action-row"><button type="button" id="import-save" class="primary" disabled>Save as hidden drafts</button></div></div><div class="import-side"><h3>Before you publish</h3><p>The supplied inventory is labelled July 2025. Titles without review flags may still contain mistakes or outdated information.</p><ul><li>Unverified availability is clearly labeled.</li><li>Staff must verify copies before approval.</li><li>Discarded and flagged entries stay hidden.</li></ul></div></div><div class="panel" style="margin-top:18px"><h3 style="margin:0 0 5px">Import batches</h3><p class="section-meta">Unflagged drafts can be published provisionally with availability marked unverified. Flagged records stay hidden for individual review.</p><div id="import-batches"></div></div></section>
     <section id="tab-legacy" role="tabpanel" hidden><div class="notice warn"><strong>Previous browser-only manager.</strong> These records are stored on this device, not in the shared catalog. They are not protected from someone using the same browser, and they are not automatically migrated. Use the old app’s backup option before changing them.</div><div class="toolbar"><button type="button" class="secondary" id="open-legacy">Open previous local manager</button></div><iframe id="legacy-frame" class="legacy-frame" title="Previous browser-only library manager" hidden></iframe></section>
   </div>
@@ -101,7 +126,7 @@ dialog{border:0;padding:0;border-radius:18px;box-shadow:0 20px 70px #00334755;wi
 <dialog id="reserve-dialog" aria-labelledby="reserve-title"><div class="modal-head"><div><div class="section-kicker">Request a book</div><h2 id="reserve-title">Request this title</h2><p id="reserve-book-title"></p><p id="reserve-availability" class="help"></p></div><button class="icon-btn" type="button" data-close="reserve-dialog" aria-label="Close">×</button></div><div class="modal-body"><form id="reserve-form"><div class="form-grid"><div class="field full"><label for="student-name">Student name</label><input id="student-name" maxlength="120" autocomplete="name" required></div><div class="field full"><label for="student-number">Student number</label><input id="student-number" maxlength="60" autocomplete="off" required></div></div><label class="check"><input type="checkbox" id="privacy-check" required><span>I understand this is a request, not a confirmed reservation. My name and student number will be shared with library staff to process it.</span></label><div class="help">Requests are stored in the library’s Supabase project in Ireland and are not automatically deleted. Ask the library about its retention and deletion policy. Staff should check your student ID at pickup. Cloudflare Turnstile provides bot verification.</div><div id="turnstile-box" style="margin-top:14px"></div><div id="turnstile-message" class="help" role="status" aria-live="polite">Preparing verification…</div><div id="reserve-error" class="form-msg" role="alert"></div><div class="action-row"><button type="button" class="secondary" data-close="reserve-dialog">Cancel</button><button id="reserve-submit" type="submit" class="primary" disabled>Submit request</button></div></form><div id="reserve-success" hidden><p>Your request was submitted. Approval depends on staff and available copies.</p><p><strong>Save this private receipt code</strong> to check your request later:</p><div class="receipt" id="receipt-code"></div><p class="help">Anyone with this code can check the request status. Do not share it publicly.</p><div class="action-row"><button type="button" class="primary" data-close="reserve-dialog">Done</button></div></div></div></dialog>
 <dialog id="book-dialog" aria-labelledby="book-dialog-title"><div class="modal-head"><div><div class="section-kicker">Staff / Inventory</div><h2 id="book-dialog-title">Book details</h2><p>Drafts remain hidden until published.</p></div><button class="icon-btn" type="button" data-close="book-dialog" aria-label="Close">×</button></div><div class="modal-body"><form id="book-form"><div class="form-grid"><div class="field full"><label for="book-title">Title *</label><input id="book-title" maxlength="300" required></div><div class="field"><label for="book-author">Author</label><input id="book-author" maxlength="300"></div><div class="field"><label for="book-copies">Total copies *</label><input id="book-copies" type="number" min="0" max="1000000" step="1" required></div><div class="field"><label for="book-accession">Accession number</label><input id="book-accession" maxlength="300"></div><div class="field"><label for="book-call">Call number</label><input id="book-call" maxlength="100"></div><div class="field"><label for="book-copyright">Copyright date</label><input id="book-copyright" maxlength="60"></div><div class="field"><label for="book-isbn">ISBN</label><input id="book-isbn" maxlength="100"></div><div class="field"><label for="book-category">Category</label><input id="book-category" maxlength="200"></div><div class="field"><label for="book-publisher">Publisher</label><input id="book-publisher" maxlength="300"></div><div class="field full"><label for="book-remarks">Inventory remarks</label><input id="book-remarks" maxlength="300"></div><div class="field full"><label for="book-notes">Review notes</label><textarea id="book-notes" maxlength="2000" readonly></textarea><small id="book-source"></small></div><div class="field full"><label for="book-visibility">Visibility</label><select id="book-visibility"><option value="draft">Hidden draft</option><option value="live">Visible in student catalog</option></select></div></div><label class="check"><input type="checkbox" id="book-verified"><span>I verified the current total copies and checked availability using up-to-date library information.</span></label><p class="help">Until verified, availability is shown as unverified and staff cannot approve or issue this book. Total copies includes borrowed or held copies.</p><label class="check" id="clear-review-wrap" hidden><input type="checkbox" id="clear-review"><span>I checked the flagged details against the source and current inventory. Clear these review notes.</span></label><div id="book-error" class="form-msg" role="alert"></div><div class="action-row"><button type="button" class="secondary" data-close="book-dialog">Cancel</button><button type="submit" class="primary">Save book</button></div></form></div></dialog>
 <dialog id="loan-dialog" aria-labelledby="loan-dialog-title"><div class="modal-head"><div><div class="section-kicker">Staff / Circulation</div><h2 id="loan-dialog-title">Issue a book</h2><p id="loan-book-title"></p></div><button class="icon-btn" type="button" data-close="loan-dialog" aria-label="Close">×</button></div><div class="modal-body"><form id="loan-form"><div class="form-grid"><div class="field full"><label for="loan-name">Student name</label><input id="loan-name" maxlength="120" required></div><div class="field"><label for="loan-number">Student number</label><input id="loan-number" maxlength="60" required></div><div class="field"><label for="loan-due">Due date (optional)</label><input id="loan-due" type="date"></div></div><div id="loan-error" class="form-msg" role="alert"></div><div class="action-row"><button type="button" class="secondary" data-close="loan-dialog">Cancel</button><button type="submit" class="primary">Issue book</button></div></form></div></dialog>
-<section id="report-print" class="print-only" aria-label="Printable borrower report"></section>
+<section id="report-print" class="print-only" aria-label="Printable staff report"></section>
 <script>
 const CHRONOS_PROJECT_URL = "https://hbfmlpfjbpdbahatugxj.supabase.co";
 const CHRONOS_PUBLISHABLE_KEY = "sb_publishable_YDl1-FBk6SDCNchqmcmf4A_Ff-XB_Fs";
@@ -117,6 +142,7 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
     books: { query: '', filter: 'all', offset: 0, limit: 30, total: 0, rows: [], serial: 0 },
     requests: { filter: 'pending', offset: 0, limit: 30, total: 0, serial: 0 },
     reports: { offset: 0, limit: 50, total: 0, serial: 0, applied: null },
+    entrance: { offset: 0, limit: 50, total: 0, serial: 0, applied: null },
     page: 'catalog', tab: 'inventory', reserveBook: null, reserveSubmitting: false, editingBook: null, loanBook: null,
     challengeSerial: 0, turnstileWidget: null, turnstileToken: '', turnstileLoading: null,
     workbook: null, fileName: '', importRows: null, importBatch: null, importInvalid: [], sheetLoading: null,
@@ -190,9 +216,9 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
     if (page === 'catalog' && state.client && !state.catalog.serial) loadCatalog();
   }
   function goTab(tab) {
-    if (!['inventory','requests','reports','import','legacy'].includes(tab)) tab = 'inventory';
+    if (!['inventory','requests','reports','entrance','import','legacy'].includes(tab)) tab = 'inventory';
     state.tab = tab;
-    for (const t of ['inventory','requests','reports','import','legacy']) $('tab-' + t).hidden = t !== tab;
+    for (const t of ['inventory','requests','reports','entrance','import','legacy']) $('tab-' + t).hidden = t !== tab;
     $$('[data-tab]').forEach(el => el.setAttribute('aria-selected', String(el.dataset.tab === tab)));
     showMessage('staff-alert', '');
     if (!state.staff) return;
@@ -366,7 +392,10 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
     }
   }
   function clearPrivateView() {
-    state.books.serial++; state.requests.serial++; state.reports.serial++; state.books.rows = [];
+    state.books.serial++; state.requests.serial++; state.reports.serial++; state.entrance.serial++; state.books.rows = [];
+    state.entrance.applied = null; state.entrance.offset = 0; state.entrance.total = 0;
+    $('entrance-report-output').hidden = true; $('entrance-stats').replaceChildren(); $('entrance-rows').replaceChildren();
+    $('entrance-report-status').textContent = ''; $('entrance-report-error').textContent = ''; $('entrance-report-form').reset(); setBusy($('entrance-report-form'), false);
     state.reports.applied = null; state.reports.offset = 0; state.reports.total = 0;
     $('report-output').hidden = true; $('report-stats').replaceChildren(); $('report-top-books').replaceChildren();
     $('report-rows').replaceChildren(); $('report-print').replaceChildren(); $('report-status').textContent = ''; $('report-error').textContent = '';
@@ -879,6 +908,100 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
     }
   }
 
+  // Staff-only entrance log. These are self-reported entries, not verified people.
+  function entranceTime(value) {
+    if (!value) return 'Not recorded';
+    const d=new Date(value);
+    return Number.isNaN(d.valueOf()) ? 'Not recorded' : d.toLocaleString('en-PH',{timeZone:'Asia/Manila',year:'numeric',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',second:'2-digit'});
+  }
+  function entranceValues(row) {
+    return [entranceTime(row.entered_at),row.identifier_type==='student_id' ? 'Student ID' : 'Name',String(row.identifier_value || '')];
+  }
+  function entranceSummary(data) {
+    return [['Total entries',Number(data.total_entries)||0],['ID entries',Number(data.id_entries)||0],['Name entries',Number(data.name_entries)||0]];
+  }
+  function assertEntranceReport(data) {
+    if (!data || typeof data!=='object' || !Array.isArray(data.records) || !Number.isSafeInteger(Number(data.total_entries)) || Number(data.total_entries)<0) throw new Error('Unexpected entrance report.');
+  }
+  function invalidateEntranceReport() {
+    state.entrance.serial++; state.entrance.applied=null; state.entrance.offset=0; state.entrance.total=0;
+    $('entrance-report-output').hidden=true; $('entrance-stats').replaceChildren(); $('entrance-rows').replaceChildren();
+    $('entrance-report-error').textContent=''; $('entrance-report-status').textContent='Choose dates, then generate a new log.';setBusy($('entrance-report-form'),false);
+  }
+  function renderEntranceReport(data,offset,visibleRecords=data.records) {
+    assertEntranceReport(data);const total=Number(data.total_entries);
+    state.entrance.offset=offset;state.entrance.total=total;
+    $('entrance-report-output').hidden=false; $('entrance-period-title').textContent=`Entrance log · ${reportPeriod(data)}`;
+    $('entrance-generated').textContent=`Generated ${reportTimestamp(data.generated_at)} · Philippine time`;
+    const stats=$('entrance-stats');stats.replaceChildren();
+    entranceSummary(data).forEach(([label,value])=>{const item=element('div','report-stat');item.append(element('strong','',value.toLocaleString()),element('span','',label));stats.append(item)});
+    const root=$('entrance-rows');root.replaceChildren();
+    if (!visibleRecords.length) root.append(empty('No entries in this period','New entries will appear after someone uses the entrance portal.'));
+    else {
+      const table=makeTable(['Entry time · Philippine time','Entered as','ID number or name']);
+      table.wrap.tabIndex=0;table.wrap.setAttribute('role','region');table.wrap.setAttribute('aria-label','Entrance log; scroll to see all columns');
+      visibleRecords.forEach(row=>{const values=entranceValues(row),tr=element('tr');values.forEach(v=>tr.append(cell(v)));table.body.append(tr)});root.append(table.wrap);
+    }
+    setPager('entrance',offset,state.entrance.limit,total);
+    const tooMany=total>REPORT_EXPORT_LIMIT;$('entrance-excel').disabled=tooMany;$('entrance-pdf').disabled=tooMany;
+    $('entrance-report-status').textContent=total ? `Showing ${offset+1}–${Math.min(offset+visibleRecords.length,total)} of ${total.toLocaleString()} entries.` : 'Log generated; no entries in this period.';
+    if(tooMany)$('entrance-report-status').textContent+=' Narrow the date range to export all records.';
+  }
+  async function loadEntranceReport(offset=0) {
+    if (!state.staff) return;
+    const form=$('entrance-report-form'),from=$('entrance-from').value,to=$('entrance-to').value;
+    if ((Boolean(from)!==Boolean(to)) || (from && from>to)) { $('entrance-report-error').textContent='Enter both dates, with the start date no later than the end date.';return; }
+    const serial=++state.entrance.serial;$('entrance-report-error').textContent='';$('entrance-report-status').textContent='Generating entrance log…';setBusy(form,true);
+    try {
+      const data=await rpc('chronos_staff_entrance_report',{p_from:from||null,p_to:to||null,p_limit:state.entrance.limit,p_offset:offset});
+      if(serial!==state.entrance.serial || !state.staff)return;
+      assertEntranceReport(data);if(offset>0 && offset>=Number(data.total_entries)){loadEntranceReport(0);return;}
+      state.entrance.applied={from,to};renderEntranceReport(data,offset);
+    } catch {
+      if(serial!==state.entrance.serial)return;state.entrance.applied=null;$('entrance-report-output').hidden=true;$('entrance-report-status').textContent='';
+      $('entrance-report-error').textContent='Could not generate the entrance log. Check your connection and try again.';
+    } finally {if(serial===state.entrance.serial)setBusy(form,false);}
+  }
+  function createEntranceWorkbook(data) {
+    const XLSX=window.XLSX,wb=XLSX.utils.book_new();
+    const add=(name,rows,widths)=>{const sheet=XLSX.utils.aoa_to_sheet(rows.map(row=>row.map(excelSafe)));sheet['!cols']=widths.map(w=>({wch:w}));XLSX.utils.book_append_sheet(wb,sheet,name)};
+    add('Summary',[
+      ['Chronos entrance log'],['Period',reportPeriod(data)],['Generated (Philippine time)',reportTimestamp(data.generated_at)],[],...entranceSummary(data),[],
+      ['Note','Entries are self-reported check-ins, not verified identities or unique people. Deleted records are not counted.'],
+      ['Privacy','Contains names or ID numbers. Handle according to school policy.']],[36,80]);
+    add('Entrance entries',[['Entry time (Philippine time)','Entered as','ID number or name'],...data.records.map(entranceValues)],[32,18,50]);
+    XLSX.writeFile(wb,`Chronos-entrance-${reportIsoDate(data.generated_at)||'report'}.xlsx`);
+  }
+  function createPrintableEntranceReport(data) {
+    const root=$('report-print');root.replaceChildren();
+    root.append(element('h1','','Chronos · Entrance log'),element('p','',`Period: ${reportPeriod(data)} · Generated ${reportTimestamp(data.generated_at)} (Philippine time)`));
+    root.append(element('p','','Private visitor information — handle according to school policy.'),element('p','',entranceSummary(data).map(([label,value])=>`${label}: ${value.toLocaleString()}`).join(' · ')));
+    root.append(element('p','','Entries are self-reported check-ins, not verified identities or unique people. Deleted records are not counted.'));
+    const table=element('table'),head=element('thead'),tr=element('tr'),body=element('tbody');
+    ['Entry time (Philippine time)','Entered as','ID number or name'].forEach(label=>{const th=element('th','',label);th.scope='col';tr.append(th)});head.append(tr);table.append(head,body);
+    data.records.forEach(row=>{const tr=element('tr');entranceValues(row).forEach(value=>tr.append(element('td','',value)));body.append(tr)});root.append(table);
+  }
+  async function exportEntranceReport(kind) {
+    if(!state.staff || !state.entrance.applied)return;
+    const serial=state.entrance.serial,range={...state.entrance.applied};
+    $('entrance-report-error').textContent='';$('entrance-excel').disabled=true;$('entrance-pdf').disabled=true;$('entrance-report-status').textContent='Preparing the entrance log…';
+    try {
+      const data=await rpc('chronos_staff_entrance_report',{p_from:range.from||null,p_to:range.to||null,p_limit:REPORT_EXPORT_LIMIT,p_offset:0});
+      if(serial!==state.entrance.serial || !state.staff)return;
+      assertEntranceReport(data);const total=Number(data.total_entries);
+      if(total>REPORT_EXPORT_LIMIT){renderEntranceReport(data,0,data.records.slice(0,state.entrance.limit));throw new Error('This log has more than 5,000 entries. Choose a smaller date range to export every entry.');}
+      if(data.records.length!==total)throw new Error('The full entrance log could not be loaded. Please generate it again.');
+      if(kind==='excel'){await ensureSheetJS();if(serial!==state.entrance.serial || !state.staff)return;createEntranceWorkbook(data);}
+      else {createPrintableEntranceReport(data);if(serial!==state.entrance.serial || !state.staff){$('report-print').replaceChildren();return;}window.print();}
+      renderEntranceReport(data,0,data.records.slice(0,state.entrance.limit));
+      $('entrance-report-status').textContent=kind==='excel'?'Excel log prepared with the latest data.':'Choose Save as PDF in the print dialog.';
+    } catch(error) {
+      if(serial!==state.entrance.serial)return;
+      const allowed=['This log has more than 5,000 entries. Choose a smaller date range to export every entry.','The full entrance log could not be loaded. Please generate it again.'];
+      $('entrance-report-error').textContent=allowed.includes(error?.message)?error.message:'Could not prepare the entrance log. Check your connection and try again.';$('entrance-report-status').textContent='';
+    } finally {if(serial===state.entrance.serial && state.staff){const tooMany=state.entrance.total>REPORT_EXPORT_LIMIT;$('entrance-excel').disabled=tooMany;$('entrance-pdf').disabled=tooMany;}}
+  }
+
   function openLegacy() {
     try {
       if (!state.legacyLoaded) {
@@ -923,6 +1046,11 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
     $('report-prev').addEventListener('click',()=>loadBorrowerReport(Math.max(0,state.reports.offset-state.reports.limit)));
     $('report-next').addEventListener('click',()=>loadBorrowerReport(state.reports.offset+state.reports.limit));
     $('report-excel').addEventListener('click',()=>exportBorrowerReport('excel')); $('report-pdf').addEventListener('click',()=>exportBorrowerReport('pdf'));
+    $('entrance-report-form').addEventListener('submit',event=>{event.preventDefault();loadEntranceReport(0);});
+    ['entrance-from','entrance-to'].forEach(id=>$(id).addEventListener('input',invalidateEntranceReport));
+    $('entrance-prev').addEventListener('click',()=>loadEntranceReport(Math.max(0,state.entrance.offset-state.entrance.limit)));
+    $('entrance-next').addEventListener('click',()=>loadEntranceReport(state.entrance.offset+state.entrance.limit));
+    $('entrance-excel').addEventListener('click',()=>exportEntranceReport('excel')); $('entrance-pdf').addEventListener('click',()=>exportEntranceReport('pdf'));
     window.addEventListener('afterprint',()=>$('report-print').replaceChildren());
     $('inventory-file').addEventListener('change',selectFile);$('import-save').addEventListener('click',saveImport);$('open-legacy').addEventListener('click',openLegacy);
     window.addEventListener('hashchange',()=>goPage(location.hash.slice(1),false));
