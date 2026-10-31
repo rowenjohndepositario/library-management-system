@@ -43,7 +43,7 @@ dialog{border:0;padding:0;border-radius:18px;box-shadow:0 20px 70px #0a2b2e55;wi
     <p>Explore the library collection, check availability, and request a book from wherever you are.</p>
     <form class="searchbox" id="catalog-search"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8"/><path d="m16.3 16.3 4 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg><label class="hidden-visually" for="catalog-query">Search title, author or call number</label><input id="catalog-query" maxlength="120" placeholder="Search title, author, or call number" autocomplete="off"><button class="primary" type="submit">Search catalog</button></form>
   </div></div>
-  <div class="below-hero"><div><div class="section-kicker">The collection</div><h2 class="section-title" id="catalog-heading">Browse the catalog</h2><div class="section-meta" id="catalog-count" aria-live="polite">Connecting to the library…</div></div><div class="tagline">A good place to begin.<br>Availability reflects records in Chronos.</div></div>
+  <div class="below-hero"><div><div class="section-kicker">The collection</div><h2 class="section-title" id="catalog-heading">Browse the catalog</h2><div class="section-meta" id="catalog-count" aria-live="polite">Connecting to the library…</div></div><div class="tagline">A good place to begin.<br>Staff confirm unverified availability.</div></div>
   <div id="catalog-message" role="status" hidden></div>
   <div id="book-grid" class="grid"></div>
   <div class="pagination" id="catalog-pages" hidden><button type="button" class="secondary" id="catalog-prev">← Previous</button><span id="catalog-page-label"></span><button type="button" class="secondary" id="catalog-next">Next →</button></div>
@@ -60,15 +60,15 @@ dialog{border:0;padding:0;border-radius:18px;box-shadow:0 20px 70px #0a2b2e55;wi
     <div id="staff-alert" role="status" aria-live="polite" hidden></div>
     <section id="tab-inventory" role="tabpanel"><div class="toolbar"><div class="field search-field"><label for="staff-search">Search inventory</label><input id="staff-search" type="search" placeholder="Title, author, accession or call number" maxlength="120"></div><div class="field"><label for="staff-filter">Visibility</label><select id="staff-filter"><option value="all">All books</option><option value="live">Public catalog</option><option value="draft">Drafts / hidden</option><option value="flagged">Needs review</option></select></div><button type="button" id="staff-search-button" class="secondary">Search</button><button type="button" id="add-book" class="primary">+ Add book</button></div><div id="staff-books-summary" class="section-meta" aria-live="polite"></div><div id="staff-books-table"></div><div class="pagination" id="staff-books-pages" hidden><button type="button" class="secondary" id="staff-books-prev">← Previous</button><span id="staff-books-page-label"></span><button type="button" class="secondary" id="staff-books-next">Next →</button></div></section>
     <section id="tab-requests" role="tabpanel" hidden><div class="notice warn"><strong>Verify student identity at pickup.</strong> A name and student number alone do not prove who submitted a request.</div><div class="toolbar"><div class="field"><label for="request-filter">Request status</label><select id="request-filter"><option value="pending">Pending</option><option value="approved">Approved</option><option value="collected">Borrowed / collected</option><option value="all">All statuses</option><option value="declined">Declined</option><option value="returned">Returned</option><option value="cancelled">Cancelled</option><option value="expired">Expired</option></select></div><button type="button" id="reload-requests" class="secondary">Refresh</button></div><div id="staff-requests-table"></div><div class="pagination" id="requests-pages" hidden><button type="button" class="secondary" id="requests-prev">← Previous</button><span id="requests-page-label"></span><button type="button" class="secondary" id="requests-next">Next →</button></div></section>
-    <section id="tab-import" role="tabpanel" hidden><div class="import-layout"><div class="panel"><div class="section-kicker">Add records safely</div><h2 class="section-title">Import a spreadsheet</h2><p class="section-meta">Select an Excel or CSV file. You’ll see a preview first; imported rows are always hidden drafts.</p><div class="import-zone"><label for="inventory-file" class="label">Choose an .xlsx, .xls or .csv file</label><input type="file" id="inventory-file" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv"><div class="help">The file is read in your browser. Review the preview before saving. Importing the same file again creates duplicate drafts.</div></div><div id="import-preview" aria-live="polite"></div><div class="action-row"><button type="button" id="import-save" class="primary" disabled>Save as hidden drafts</button></div></div><div class="import-side"><h3>Before you publish</h3><p>Check accession numbers, copy counts, and the current shelf status. The supplied inventory is labelled July 2025.</p><ul><li>Discarded items stay hidden.</li><li>Blank copy counts are not guessed.</li><li>Flagged entries stay out of bulk publishing.</li></ul></div></div><div class="panel" style="margin-top:18px"><h3 style="margin:0 0 5px">Import batches</h3><p class="section-meta">Publish unflagged drafts only after checking current availability. Flagged records stay hidden for individual review.</p><div id="import-batches"></div></div></section>
+    <section id="tab-import" role="tabpanel" hidden><div class="import-layout"><div class="panel"><div class="section-kicker">Add records safely</div><h2 class="section-title">Import a spreadsheet</h2><p class="section-meta">Select an Excel or CSV file. You’ll see a preview first; imported rows are always hidden drafts.</p><div class="import-zone"><label for="inventory-file" class="label">Choose an .xlsx, .xls or .csv file</label><input type="file" id="inventory-file" accept=".xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv"><div class="help">The file is read in your browser. Review the preview before saving. Importing the same file again creates duplicate drafts.</div></div><div id="import-preview" aria-live="polite"></div><div class="action-row"><button type="button" id="import-save" class="primary" disabled>Save as hidden drafts</button></div></div><div class="import-side"><h3>Before you publish</h3><p>The supplied inventory is labelled July 2025. Titles without review flags may still contain mistakes or outdated information.</p><ul><li>Unverified availability is clearly labeled.</li><li>Staff must verify copies before approval.</li><li>Discarded and flagged entries stay hidden.</li></ul></div></div><div class="panel" style="margin-top:18px"><h3 style="margin:0 0 5px">Import batches</h3><p class="section-meta">Unflagged drafts can be published provisionally with availability marked unverified. Flagged records stay hidden for individual review.</p><div id="import-batches"></div></div></section>
     <section id="tab-legacy" role="tabpanel" hidden><div class="notice warn"><strong>Previous browser-only manager.</strong> These records are stored on this device, not in the shared catalog. They are not protected from someone using the same browser, and they are not automatically migrated. Use the old app’s backup option before changing them.</div><div class="toolbar"><button type="button" class="secondary" id="open-legacy">Open previous local manager</button></div><iframe id="legacy-frame" class="legacy-frame" title="Previous browser-only library manager" hidden></iframe></section>
   </div>
 </section>
 </main>
 <footer class="footer"><div class="container footer-inner"><div><strong>CHRONOS</strong><p>College of Fisheries and Marine Science · Sagñay Campus</p></div><div><p>Requests are subject to library approval.</p><p>Questions? Please contact your library staff.</p></div></div></footer>
 
-<dialog id="reserve-dialog" aria-labelledby="reserve-title"><div class="modal-head"><div><div class="section-kicker">Request a book</div><h2 id="reserve-title">Reserve this title</h2><p id="reserve-book-title"></p></div><button class="icon-btn" type="button" data-close="reserve-dialog" aria-label="Close">×</button></div><div class="modal-body"><form id="reserve-form"><div class="form-grid"><div class="field full"><label for="student-name">Student name</label><input id="student-name" maxlength="120" autocomplete="name" required></div><div class="field full"><label for="student-number">Student number</label><input id="student-number" maxlength="60" autocomplete="off" required></div></div><label class="check"><input type="checkbox" id="privacy-check" required><span>I understand this is a request, not a confirmed reservation. My name and student number will be shared with library staff to process it.</span></label><div class="help">Library staff may ask to see your student ID at pickup. Verification is provided by Cloudflare Turnstile.</div><div id="turnstile-box" style="margin-top:14px"></div><div id="turnstile-message" class="help" role="status" aria-live="polite">Preparing verification…</div><div id="reserve-error" class="form-msg" role="alert"></div><div class="action-row"><button type="button" class="secondary" data-close="reserve-dialog">Cancel</button><button id="reserve-submit" type="submit" class="primary" disabled>Submit request</button></div></form><div id="reserve-success" hidden><p>Your request was submitted. Approval depends on staff and available copies.</p><p><strong>Save this private receipt code</strong> to check your request later:</p><div class="receipt" id="receipt-code"></div><p class="help">Anyone with this code can check the request status. Do not share it publicly.</p><div class="action-row"><button type="button" class="primary" data-close="reserve-dialog">Done</button></div></div></div></dialog>
-<dialog id="book-dialog" aria-labelledby="book-dialog-title"><div class="modal-head"><div><div class="section-kicker">Staff / Inventory</div><h2 id="book-dialog-title">Book details</h2><p>Drafts remain hidden until published.</p></div><button class="icon-btn" type="button" data-close="book-dialog" aria-label="Close">×</button></div><div class="modal-body"><form id="book-form"><div class="form-grid"><div class="field full"><label for="book-title">Title *</label><input id="book-title" maxlength="300" required></div><div class="field"><label for="book-author">Author</label><input id="book-author" maxlength="300"></div><div class="field"><label for="book-copies">Total copies *</label><input id="book-copies" type="number" min="0" max="1000000" step="1" required></div><div class="field"><label for="book-accession">Accession number</label><input id="book-accession" maxlength="300"></div><div class="field"><label for="book-call">Call number</label><input id="book-call" maxlength="100"></div><div class="field"><label for="book-copyright">Copyright date</label><input id="book-copyright" maxlength="60"></div><div class="field"><label for="book-isbn">ISBN</label><input id="book-isbn" maxlength="100"></div><div class="field"><label for="book-category">Category</label><input id="book-category" maxlength="200"></div><div class="field"><label for="book-publisher">Publisher</label><input id="book-publisher" maxlength="300"></div><div class="field full"><label for="book-remarks">Inventory remarks</label><input id="book-remarks" maxlength="300"></div><div class="field full"><label for="book-notes">Review notes</label><textarea id="book-notes" maxlength="2000" readonly></textarea><small id="book-source"></small></div><div class="field full"><label for="book-visibility">Visibility</label><select id="book-visibility"><option value="draft">Hidden draft</option><option value="live">Visible in student catalog</option></select></div></div><label class="check" id="clear-review-wrap" hidden><input type="checkbox" id="clear-review"><span>I checked the flagged details against the source and current inventory. Clear these review notes.</span></label><div id="book-error" class="form-msg" role="alert"></div><div class="action-row"><button type="button" class="secondary" data-close="book-dialog">Cancel</button><button type="submit" class="primary">Save book</button></div></form></div></dialog>
+<dialog id="reserve-dialog" aria-labelledby="reserve-title"><div class="modal-head"><div><div class="section-kicker">Request a book</div><h2 id="reserve-title">Request this title</h2><p id="reserve-book-title"></p><p id="reserve-availability" class="help"></p></div><button class="icon-btn" type="button" data-close="reserve-dialog" aria-label="Close">×</button></div><div class="modal-body"><form id="reserve-form"><div class="form-grid"><div class="field full"><label for="student-name">Student name</label><input id="student-name" maxlength="120" autocomplete="name" required></div><div class="field full"><label for="student-number">Student number</label><input id="student-number" maxlength="60" autocomplete="off" required></div></div><label class="check"><input type="checkbox" id="privacy-check" required><span>I understand this is a request, not a confirmed reservation. My name and student number will be shared with library staff to process it.</span></label><div class="help">Requests are stored in the library’s Supabase project in Ireland and are not automatically deleted. Ask the library about its retention and deletion policy. Staff should check your student ID at pickup. Cloudflare Turnstile provides bot verification.</div><div id="turnstile-box" style="margin-top:14px"></div><div id="turnstile-message" class="help" role="status" aria-live="polite">Preparing verification…</div><div id="reserve-error" class="form-msg" role="alert"></div><div class="action-row"><button type="button" class="secondary" data-close="reserve-dialog">Cancel</button><button id="reserve-submit" type="submit" class="primary" disabled>Submit request</button></div></form><div id="reserve-success" hidden><p>Your request was submitted. Approval depends on staff and available copies.</p><p><strong>Save this private receipt code</strong> to check your request later:</p><div class="receipt" id="receipt-code"></div><p class="help">Anyone with this code can check the request status. Do not share it publicly.</p><div class="action-row"><button type="button" class="primary" data-close="reserve-dialog">Done</button></div></div></div></dialog>
+<dialog id="book-dialog" aria-labelledby="book-dialog-title"><div class="modal-head"><div><div class="section-kicker">Staff / Inventory</div><h2 id="book-dialog-title">Book details</h2><p>Drafts remain hidden until published.</p></div><button class="icon-btn" type="button" data-close="book-dialog" aria-label="Close">×</button></div><div class="modal-body"><form id="book-form"><div class="form-grid"><div class="field full"><label for="book-title">Title *</label><input id="book-title" maxlength="300" required></div><div class="field"><label for="book-author">Author</label><input id="book-author" maxlength="300"></div><div class="field"><label for="book-copies">Total copies *</label><input id="book-copies" type="number" min="0" max="1000000" step="1" required></div><div class="field"><label for="book-accession">Accession number</label><input id="book-accession" maxlength="300"></div><div class="field"><label for="book-call">Call number</label><input id="book-call" maxlength="100"></div><div class="field"><label for="book-copyright">Copyright date</label><input id="book-copyright" maxlength="60"></div><div class="field"><label for="book-isbn">ISBN</label><input id="book-isbn" maxlength="100"></div><div class="field"><label for="book-category">Category</label><input id="book-category" maxlength="200"></div><div class="field"><label for="book-publisher">Publisher</label><input id="book-publisher" maxlength="300"></div><div class="field full"><label for="book-remarks">Inventory remarks</label><input id="book-remarks" maxlength="300"></div><div class="field full"><label for="book-notes">Review notes</label><textarea id="book-notes" maxlength="2000" readonly></textarea><small id="book-source"></small></div><div class="field full"><label for="book-visibility">Visibility</label><select id="book-visibility"><option value="draft">Hidden draft</option><option value="live">Visible in student catalog</option></select></div></div><label class="check"><input type="checkbox" id="book-verified"><span>I verified the current total copies and checked availability using up-to-date library information.</span></label><p class="help">Until verified, availability is shown as unverified and staff cannot approve or issue this book. Total copies includes borrowed or held copies.</p><label class="check" id="clear-review-wrap" hidden><input type="checkbox" id="clear-review"><span>I checked the flagged details against the source and current inventory. Clear these review notes.</span></label><div id="book-error" class="form-msg" role="alert"></div><div class="action-row"><button type="button" class="secondary" data-close="book-dialog">Cancel</button><button type="submit" class="primary">Save book</button></div></form></div></dialog>
 <dialog id="loan-dialog" aria-labelledby="loan-dialog-title"><div class="modal-head"><div><div class="section-kicker">Staff / Circulation</div><h2 id="loan-dialog-title">Issue a book</h2><p id="loan-book-title"></p></div><button class="icon-btn" type="button" data-close="loan-dialog" aria-label="Close">×</button></div><div class="modal-body"><form id="loan-form"><div class="form-grid"><div class="field full"><label for="loan-name">Student name</label><input id="loan-name" maxlength="120" required></div><div class="field"><label for="loan-number">Student number</label><input id="loan-number" maxlength="60" required></div><div class="field"><label for="loan-due">Due date (optional)</label><input id="loan-due" type="date"></div></div><div id="loan-error" class="form-msg" role="alert"></div><div class="action-row"><button type="button" class="secondary" data-close="loan-dialog">Cancel</button><button type="submit" class="primary">Issue book</button></div></form></div></dialog>
 <script>
 const CHRONOS_PROJECT_URL = "https://hbfmlpfjbpdbahatugxj.supabase.co";
@@ -128,6 +128,7 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
       'Requests are not configured yet. Please contact the library.', 'Enter a valid name, student number, and verification.',
       'Enter a valid student name and student number.', 'No copy is available to approve.', 'Book not available.',
       'No copies are available.', 'Copy count cannot be less than the active approved or borrowed copies.',
+      'Verify current copies in Inventory before approving or issuing this book.', 'Invalid availability verification setting.',
       'Review this record and its discarded status before publishing.', 'That status change is not allowed.',
       'Enter a title, a valid copy count, and a visibility setting.', 'Copy count is too large.',
       'Expected one confirmed user. Check the email and whether the user is confirmed.',
@@ -188,9 +189,10 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
     info.append(element('span', '', `Call no. ${book.call_number || '—'}`));
     if (book.copyright_date) info.append(element('span', '', `© ${book.copyright_date}`));
     const bottom = element('div', 'book-bottom');
+    const verified = book.availability_verified === true;
     const available = Number(book.available_copies) || 0;
-    bottom.append(badge(available > 0 ? `${available} available` : 'Unavailable', available > 0 ? 'ok' : 'off'));
-    bottom.append(button('Request →', 'small-btn emph', () => openReserve(book), available <= 0));
+    bottom.append(badge(verified ? (available > 0 ? `${available} available` : 'Unavailable') : 'Availability unverified', verified ? (available > 0 ? 'ok' : 'off') : 'warn'));
+    bottom.append(button('Request →', 'small-btn emph', () => openReserve(book), book.request_allowed !== true));
     card.append(top, info, bottom); return card;
   }
   async function loadCatalog() {
@@ -265,6 +267,9 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
   }
   function openReserve(book) {
     state.reserveBook = book; $('reserve-book-title').textContent = book.title;
+    $('reserve-availability').textContent = book.availability_verified === true
+      ? 'Staff will confirm your request before collection.'
+      : 'Availability is unverified. A request does not guarantee a copy; staff must check first.';
     $('reserve-form').reset(); $('reserve-error').textContent = '';
     $('reserve-form').hidden = false; $('reserve-success').hidden = true;
     dialogOpen('reserve-dialog'); prepareChallenge();
@@ -393,12 +398,14 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
       rows.forEach(book => {
         const tr = element('tr');
         tr.append(cell(book.title,book.author || 'Author not listed'),cell(book.accession_number || '—',book.call_number ? 'Call no. ' + book.call_number : 'No call number'));
-        tr.append(cell(`${book.available_copies} available`,`${book.total_copies} total`));
+        tr.append(book.availability_verified === true
+          ? cell(`${book.available_copies} available`,`${book.total_copies} total · verified`)
+          : cell('Availability unverified',`${book.total_copies} recorded in draft · not confirmed`));
         const visibility = element('td'); visibility.append(badge(book.archived ? 'Hidden draft' : 'Public', book.archived ? 'draft' : 'ok'));
         if (book.review_notes) visibility.append(element('span','table-sub','Needs review'));
         tr.append(visibility);
         const actions = element('td'), group = element('div','table-actions');
-        group.append(button('Edit','small-btn',() => openBook(book)),button('Issue','small-btn',() => openLoan(book),book.archived || Number(book.available_copies) <= 0));
+        group.append(button('Edit','small-btn',() => openBook(book)),button('Issue','small-btn',() => openLoan(book),book.archived || book.availability_verified !== true || Number(book.available_copies) <= 0));
         actions.append(group); tr.append(actions); t.body.append(tr);
       });
       root.append(t.wrap); setPager('staff-books',state.books.offset,state.books.limit,state.books.total);
@@ -417,6 +424,7 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
     $('book-isbn').value = book?.isbn || ''; $('book-category').value = book?.category || '';
     $('book-publisher').value = book?.publisher || ''; $('book-remarks').value = book?.inventory_remarks || '';
     $('book-notes').value = book?.review_notes || ''; $('book-visibility').value = book && !book.archived ? 'live' : 'draft';
+    $('book-verified').checked = book?.availability_verified === true;
     $('book-source').textContent = book?.source_page ? `Source: PDF page ${book.source_page}. Original copy value: ${book.source_copy_count || '(blank)'}.` : '';
     $('clear-review-wrap').hidden = !book?.review_notes; $('clear-review').checked = false;
     dialogOpen('book-dialog');
@@ -432,7 +440,7 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
       inventory_remarks:$('book-remarks').value.trim(),
       review_notes:$('clear-review').checked ? '' : $('book-notes').value,
       source_copy_count:state.editingBook?.source_copy_count || '', source_page:state.editingBook?.source_page || '',
-      archived:$('book-visibility').value !== 'live'
+      archived:$('book-visibility').value !== 'live', availability_verified:$('book-verified').checked
     };
     try {
       await rpc('chronos_staff_save_book',{p_book:book,p_id:state.editingBook?.id || null});
@@ -445,6 +453,7 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
   }
   async function issueBook(event) {
     event.preventDefault(); const form = event.currentTarget; if (!form.reportValidity() || !state.loanBook) return;
+    if (!window.confirm('Have you checked that a copy is currently available to issue?')) return;
     $('loan-error').textContent = ''; setBusy(form,true);
     try {
       await rpc('chronos_staff_issue',{p_book_id:state.loanBook.id,p_student_name:$('loan-name').value.trim(),p_student_number:$('loan-number').value.trim(),p_due_on:$('loan-due').value || null});
@@ -454,6 +463,7 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
   }
   async function transition(request, next) {
     let due = null;
+    if (next === 'approved' && !window.confirm('Have you checked that a copy is currently available for this student?')) return;
     if (next === 'collected') {
       const value = window.prompt('Optional due date (YYYY-MM-DD). Leave blank if none:', '');
       if (value === null) return;
@@ -483,7 +493,11 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
         const st = element('td'); st.append(badge(statusLabel(request.status),request.status === 'approved' ? 'ok' : request.status === 'pending' ? 'warn' : 'off')); tr.append(st);
         tr.append(cell(humanDate(request.created_at),request.due_on ? 'Due '+humanDate(request.due_on+'T12:00:00') : ''));
         const td = element('td'), actions = element('div','table-actions');
-        if (request.status === 'pending') actions.append(button('Approve','small-btn emph',() => transition(request,'approved')),button('Decline','small-btn danger',() => transition(request,'declined')));
+        if (request.status === 'pending') {
+          const verified = request.book_availability_verified === true;
+          actions.append(button('Approve','small-btn emph',() => transition(request,'approved'),!verified),button('Decline','small-btn danger',() => transition(request,'declined')));
+          if (!verified) actions.append(element('span','table-sub','Verify current copies in Inventory before approval.'));
+        }
         if (request.status === 'approved') actions.append(button('Collected','small-btn emph',() => transition(request,'collected')),button('Cancel','small-btn',() => transition(request,'cancelled')));
         if (request.status === 'collected') actions.append(button('Return','small-btn emph',() => transition(request,'returned')));
         if (!actions.childNodes.length) actions.append(element('span','inline-note','—'));
@@ -563,7 +577,7 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
       state.importRows = rows; state.importInvalid = invalid;
       const heading = element('h3','','Preview'); heading.style.margin = '18px 0 7px'; preview.append(heading);
       const summary = element('p','section-meta',`${rows.length.toLocaleString()} rows · ${rows.filter(r=>r.review_notes).length.toLocaleString()} flagged · ${rows.filter(r=>r.inventory_remarks.toLowerCase().includes('discard')).length} discarded`); preview.append(summary);
-      preview.append(element('p','help',`Sheet: ${sheetName}. All imported rows will be hidden drafts. Review details and current availability before publishing.`));
+      preview.append(element('p','help',`Sheet: ${sheetName}. All imported rows will be hidden drafts. Copy availability remains unverified until staff checks it.`));
       if (invalid.length) { const box=element('div','notice error',`Import blocked: ${invalid.slice(0,4).join(' · ')}${invalid.length>4 ? ` · and ${invalid.length-4} more` : ''}`); preview.append(box); }
       if (!rows.length) { preview.append(element('div','notice warn','No book rows found on this sheet.')); return; }
       const t = makeTable(['Title / author','Accession','Copies','Review']);
@@ -638,10 +652,10 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
   async function publishBatch(batch) {
     const count = Number(batch.eligible) || 0;
     if (!count) return;
-    if (!window.confirm(`Publish ${count} unflagged records from this batch?\n\nConfirm that you checked the inventory and current copy availability. Flagged and discarded records will remain hidden.`)) return;
+    if (!window.confirm(`Publish ${count} unflagged titles provisionally?\n\nOld copy counts will not be presented as current unless staff has verified them. Students can request unverified titles; staff must check a copy before approval. Flagged and discarded records will remain hidden.`)) return;
     try {
       const n = await rpc('chronos_staff_publish_batch',{p_batch:batch.id});
-      showMessage('staff-alert',`${n} reviewed, unflagged records are now visible in the public catalog.`,'ok'); await loadBatches(); loadCatalog();
+      showMessage('staff-alert',`${n} unflagged titles are now visible. Availability remains unverified unless staff has checked it.`,'ok'); await loadBatches(); loadCatalog();
     } catch (error) { showMessage('staff-alert',errorMessage(error,'Could not publish this batch.')); }
   }
   async function loadBatches() {
@@ -651,7 +665,7 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
       const data=await rpc('chronos_staff_batches'); if (!state.staff) return;
       const rows=Array.isArray(data)?data:[];root.replaceChildren();
       if (!rows.length) { root.append(element('p','section-meta','No spreadsheet batches yet.'));return; }
-      rows.forEach(batch=>{ const row=element('div','batch'),details=element('div');details.append(element('strong','',`${batch.row_count} rows · ${humanDate(batch.created_at)}`),element('div','inline-note',`${batch.eligible} unflagged hidden records eligible to publish`));row.append(details,button(`Publish ${batch.eligible} unflagged`,'small-btn',()=>publishBatch(batch),!Number(batch.eligible)));root.append(row); });
+      rows.forEach(batch=>{ const row=element('div','batch'),details=element('div');details.append(element('strong','',`${batch.row_count} rows · ${humanDate(batch.created_at)}`),element('div','inline-note',`${batch.eligible} unflagged hidden titles eligible for provisional publication`));row.append(details,button(`Publish ${batch.eligible} provisionally`,'small-btn',()=>publishBatch(batch),!Number(batch.eligible)));root.append(row); });
     } catch { root.replaceChildren(element('p','form-msg','Could not load import batches.')); }
   }
   function openLegacy() {
@@ -674,6 +688,7 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
     $('reserve-dialog').addEventListener('cancel',event=>{if(state.reserveSubmitting)event.preventDefault();});
     $('reserve-dialog').addEventListener('close',()=>{clearChallenge();state.reserveBook=null;});
     $('login-form').addEventListener('submit',login);
+    ['book-copies','book-title','book-accession'].forEach(id=>$(id).addEventListener('input',()=>{ $('book-verified').checked=false; }));
     $('sign-out').addEventListener('click',async()=>{
       let serverError = false;
       try { if (state.client) { const {error} = await state.client.auth.signOut({scope:'local'}); serverError = Boolean(error); } }
