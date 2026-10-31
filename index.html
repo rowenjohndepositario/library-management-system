@@ -105,7 +105,7 @@ dialog{border:0;padding:0;border-radius:18px;box-shadow:0 20px 70px #00334755;wi
           <div class="field"><label for="summary-category">Program / category</label><select id="summary-category"><option value="">All categories</option></select></div>
           <button type="submit" class="primary">Generate statistics</button>
         </form>
-        <p class="help">Hourly: up to 31 days; daily: up to three years; monthly: up to 30 years. Older entries without a roster category are shown as unclassified.</p>
+        <p class="help">Hourly: up to 31 days; daily: up to three years; monthly: up to 30 years. Entries without a roster category, including entries before roster matching is activated, are shown as unclassified.</p>
         <div id="summary-error" class="form-msg" role="alert"></div><div id="summary-status" class="section-meta" role="status" aria-live="polite"></div>
         <div id="summary-output" hidden>
           <div class="report-title-row"><h3 id="summary-title">Entry statistics</h3><p class="help" id="summary-generated"></p></div>
@@ -125,7 +125,7 @@ dialog{border:0;padding:0;border-radius:18px;box-shadow:0 20px 70px #00334755;wi
         <div id="entrance-report-output" hidden>
           <div class="report-title-row"><div><h3 id="entrance-period-title">Entrance log</h3><p class="help" id="entrance-generated"></p></div></div>
           <div class="report-stats" id="entrance-stats"></div>
-          <p class="help">Each row is one entry. One person can appear more than once. Deleted records are not counted.</p>
+          <p class="help">Each row is one entry. One person can appear more than once. Entries without a selected or matched type are shown as “Name or ID (unspecified)”. Deleted records are not counted.</p>
           <div id="entrance-rows"></div>
           <div class="pagination" id="entrance-pages" hidden><button type="button" class="secondary" id="entrance-prev">← Previous</button><span id="entrance-page-label"></span><button type="button" class="secondary" id="entrance-next">Next →</button></div>
           <p class="help">Excel and PDF exports include up to 5,000 entries. For a larger report, choose a smaller date range.</p>
@@ -960,10 +960,11 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
     return Number.isNaN(d.valueOf()) ? 'Not recorded' : d.toLocaleString('en-PH',{timeZone:'Asia/Manila',year:'numeric',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',second:'2-digit'});
   }
   function entranceValues(row) {
-    return [entranceTime(row.entered_at),row.identifier_type==='student_id' ? 'ID number' : 'Name',String(row.identifier_value || ''),row.roster_name || 'Not matched',row.roster_category || 'Unclassified (older entries)'];
+    const type=row.identifier_type==='student_id' ? 'ID number' : row.identifier_type==='name' ? 'Name' : 'Name or ID';
+    return [entranceTime(row.entered_at),type,String(row.identifier_value || '')];
   }
   function entranceSummary(data) {
-    return [['Total entries',Number(data.total_entries)||0],['ID entries',Number(data.id_entries)||0],['Name entries',Number(data.name_entries)||0]];
+    return [['Total entries',Number(data.total_entries)||0],['ID entries',Number(data.id_entries)||0],['Name entries',Number(data.name_entries)||0],['Name or ID (unspecified)',Number(data.name_or_id_entries)||0]];
   }
   function assertEntranceReport(data) {
     if (!data || typeof data!=='object' || !Array.isArray(data.records) || !Number.isSafeInteger(Number(data.total_entries)) || Number(data.total_entries)<0) throw new Error('Unexpected entrance report.');
@@ -983,7 +984,7 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
     const root=$('entrance-rows');root.replaceChildren();
     if (!visibleRecords.length) root.append(empty('No entries in this period','New entries will appear after someone uses the entrance portal.'));
     else {
-      const table=makeTable(['Entry time · Philippine time','Entered as','ID number or name','Matched roster name','Program / category']);
+      const table=makeTable(['Entry time · Philippine time','Entered as','ID number or name']);
       table.wrap.tabIndex=0;table.wrap.setAttribute('role','region');table.wrap.setAttribute('aria-label','Entrance log; scroll to see all columns');
       visibleRecords.forEach(row=>{const values=entranceValues(row),tr=element('tr');values.forEach(v=>tr.append(cell(v)));table.body.append(tr)});root.append(table.wrap);
     }
@@ -1014,7 +1015,7 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
       ['Chronos entrance log'],['Period',reportPeriod(data)],['Generated (Philippine time)',reportTimestamp(data.generated_at)],[],...entranceSummary(data),[],
       ['Note','Entries are self-reported check-ins, not verified identities or unique people. Deleted records are not counted.'],
       ['Privacy','Contains names or ID numbers. Handle according to school policy.']],[36,80]);
-    add('Entrance entries',[['Entry time (Philippine time)','Entered as','ID number or name','Matched roster name','Program / category'],...data.records.map(entranceValues)],[32,18,35,35,32]);
+    add('Entrance entries',[['Entry time (Philippine time)','Entered as','ID number or name'],...data.records.map(entranceValues)],[32,18,50]);
     XLSX.writeFile(wb,`Chronos-entrance-${reportIsoDate(data.generated_at)||'report'}.xlsx`);
   }
   function createPrintableEntranceReport(data) {
@@ -1023,7 +1024,7 @@ const CHRONOS_LEGACY_BASE64 = "PCFkb2N0eXBlIGh0bWw+CjxodG1sIGxhbmc9ImVuIj4KPGhlY
     root.append(element('p','','Private visitor information — handle according to school policy.'),element('p','',entranceSummary(data).map(([label,value])=>`${label}: ${value.toLocaleString()}`).join(' · ')));
     root.append(element('p','','Entries are self-reported check-ins, not verified identities or unique people. Deleted records are not counted.'));
     const table=element('table'),head=element('thead'),tr=element('tr'),body=element('tbody');
-    ['Entry time (Philippine time)','Entered as','ID number or name','Matched roster name','Program / category'].forEach(label=>{const th=element('th','',label);th.scope='col';tr.append(th)});head.append(tr);table.append(head,body);
+    ['Entry time (Philippine time)','Entered as','ID number or name'].forEach(label=>{const th=element('th','',label);th.scope='col';tr.append(th)});head.append(tr);table.append(head,body);
     data.records.forEach(row=>{const tr=element('tr');entranceValues(row).forEach(value=>tr.append(element('td','',value)));body.append(tr)});root.append(table);
   }
   async function exportEntranceReport(kind) {
